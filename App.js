@@ -6,6 +6,7 @@ import RecipePage from './pages/RecipePage';
 import { AppRegistry } from 'react-native';
 import IngredientPage from './pages/IngredientPage';
 import RecipeDetailsPage from './pages/RecipeDetailsPage';
+import IngredientAddPage from './pages/IngredientAddPage';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -19,12 +20,21 @@ const RecipeStack = () => {
   )
 }
 
+const IngredientStack = () => {
+  return(
+  <Stack.Navigator >
+    <Stack.Screen name="Ingredients" component={IngredientPage} />
+    <Stack.Screen name="AddIngredient" component={IngredientAddPage} />
+  </Stack.Navigator>
+  )
+}
+
 const App = () => {
   return (
 <NavigationContainer>
   <Tab.Navigator>
       <Tab.Screen name="RecipesStack" options={{headerShown: false}} component={RecipeStack} />
-      <Tab.Screen name="Ingredients" component={IngredientPage} />
+      <Tab.Screen name="IngredientStack" options={{headerShown: false}} component={IngredientStack} />
   </Tab.Navigator>
 </NavigationContainer>
   );

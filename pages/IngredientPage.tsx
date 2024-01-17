@@ -1,10 +1,16 @@
+import { Button, ListItem, Tab } from '@rneui/base';
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-const IngredientPage = () => {
+const IngredientPage = ({navigation}) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Ingredient Page</Text>
+      <Button style={styles.button} title="Add new ingredient" onPress={() => {navigation.navigate('AddIngredient')}}/> 
+      <View style={styles.list}>
+        <ListItem style={styles.listitem}>
+          <Text style={styles.text}>Tomat - 25kr</Text>
+        </ListItem>
+      </View>
     </View>
   );
 };
@@ -12,11 +18,23 @@ const IngredientPage = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    //justifyContent: 'center',
     alignItems: 'center',
+    margin: 10
+  },
+  button: {
+    width: 300,
+  },
+  listitem: {
+    flex: 1,
+    marginTop: 12,
+    width: 300,
+  },
+  list: {
+    flex: 1,
   },
   text: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 'bold',
   },
 });
