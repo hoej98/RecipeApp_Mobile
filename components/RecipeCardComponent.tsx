@@ -19,7 +19,7 @@ const RecipeCardComponent: React.FC<props> = ({navigation, recipe}) => {
                 <Image style={styles.image} source={{uri: recipe.pictureUrl}} />
             </View>
             <View style={styles.text_container}>
-            <Text style={styles.text}>{recipe.ingredients[0].price + recipe.ingredients[1].price} Kr.</Text>
+            <Text style={styles.text}>{recipe.ingredients[0]?.price} Kr.</Text>
             </View>
         </Card>
     </View>
