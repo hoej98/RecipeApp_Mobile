@@ -1,5 +1,6 @@
 export type Ingredient = {
     id: string,
     name: string,
-    price: number
+    price: number,
+    imageUrl?: string
 }

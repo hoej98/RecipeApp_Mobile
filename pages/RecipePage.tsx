@@ -5,10 +5,7 @@ import { Recipe } from '../types/Recipe';
 import axios from 'axios';
 import { Button } from '@rneui/base/dist/Button';
 import { Ingredient } from '../types/Ingredient';
-
-const recipeList: Recipe[] = [{name: "boller i karry", id: "1234567", ingredients: [{name: "Boller", price: 12, id: "123"}, {name: "Karry", price: 20, id: "321"}], pictureUrl: "https://cdn.bloggersdelight.dk/wp-content/blogs.dir/248198/files/2020/03/kvdrcover.jpg"},
-{name: "Lasagne", id: "7654321", ingredients: [{name: "Lasa", price: 8, id: "2531"}, {name: "ga", price: 11, id: "9184336"}], pictureUrl: "https://mambeno.dk/wp-content/uploads/2017/11/Lasagne-med-oestershatte.jpg"}
-]
+import { colors } from '../assets/theme';
 
 const RecipePage = ({navigation}) => {
 
@@ -39,7 +36,7 @@ const RecipePage = ({navigation}) => {
   return (
     <View style={styles.container}>
           <View style={styles.app}>
-            <Button style={styles.button} title="Add new Recipe" onPress={() => {navigation.navigate('AddRecipe', {onAddRecipe: handleAddRecipe})}}/> 
+            <Button style={styles.button} buttonStyle={{borderRadius: 8, backgroundColor: colors.ELEMENTS_PRIMARY}} titleStyle={{color: colors.ELEMENTS_SECONDARY}} title="Add new Recipe" onPress={() => {navigation.navigate('AddRecipe', {onAddRecipe: handleAddRecipe})}}/> 
           <FlatList
             data={recipes}
             numColumns={2}
@@ -57,7 +54,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: 400,
     marginHorizontal: "auto",
-    margin: 10
+    margin: 10,
+    backgroundColor: colors.BACKGROUND_PRIMARY
   },
   text: {
     fontSize: 18,

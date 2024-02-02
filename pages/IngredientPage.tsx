@@ -1,12 +1,15 @@
 import { Button, ListItem, Tab } from '@rneui/base';
 import axios from 'axios';
 import React, {useEffect, useState} from 'react';
-import { View, Text, StyleSheet } from 'react-native'; 
+import { View, Text, StyleSheet, ScrollView, RefreshControl } from 'react-native'; 
 import {Ingredient} from "../types/Ingredient"
+import IngredientItem from '../components/IngredientItemComponent';
+import { colors } from '../assets/theme';
 
 const IngredientPage = ({navigation}) => {
 
   const [ingredients, setIngredients] = useState<Ingredient[]>();
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const getIngredients = async() => {
     const temp_ingredients = await axios.get("https://recipeapp2.fly.dev/Ingredient")
@@ -24,14 +27,21 @@ const IngredientPage = ({navigation}) => {
     await getIngredients();
   }
 
+  const handleRefresh = async() => {
+    setIsRefreshing(true);
+    await getIngredients();
+    setIsRefreshing(false);
+  }
+
   useEffect(() => {
     getIngredients();
   }, [])
 
   return (
+    <View style={styles.globalAppContainer}>
     <View style={styles.container}>
-      <Button style={styles.button} title="Add new ingredient" onPress={() => {navigation.navigate('AddIngredient', {onAddIngredient: handleAddIngredient})}}/> 
-      <View style={styles.list}>
+      <Button style={styles.button} buttonStyle={{borderRadius: 8}} title="Add new ingredient" titleStyle={{color: colors.ELEMENTS_SECONDARY}} color={colors.ELEMENTS_PRIMARY} onPress={() => {navigation.navigate('AddIngredient', {onAddIngredient: handleAddIngredient})}}/> 
+      {/* <View style={styles.list}>
         {ingredients?.map((ingredient) => {
           return( 
           <ListItem style={styles.listitem}>
@@ -40,7 +50,19 @@ const IngredientPage = ({navigation}) => {
           </ListItem>
           )
         })}
-      </View>
+      </View> */}
+      <ScrollView 
+      style={{width: 360}}
+      refreshControl={
+        <RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh}/>
+      }>
+      {ingredients?.map((ingredient) => {
+        return (
+          <IngredientItem ingredient={ingredient} handleDeleteIngredient={handleDeleteIngredient} />
+        )
+      })}
+      </ScrollView>
+    </View>
     </View>
   );
 };
@@ -54,6 +76,10 @@ const styles = StyleSheet.create({
   },
   button: {
     width: 300,
+    marginBottom: 10,
+    shadowColor: colors.ELEMENTS_SECONDARY,
+    shadowOffset: {width: 0, height: 4},
+    shadowOpacity: 0.2,
   },
   listitem: {
     // flex: 1,
@@ -67,6 +93,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
+  globalAppContainer: {
+    flex: 1,
+    backgroundColor: colors.BACKGROUND_PRIMARY
+  }
 });
 
 export default IngredientPage;
