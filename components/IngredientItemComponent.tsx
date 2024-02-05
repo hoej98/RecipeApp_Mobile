@@ -10,7 +10,7 @@ type props = {
 }
 
 const IngredientItem = ({ ingredient, handleDeleteIngredient } : props) => {
-  const { name, price, imageUrl, id } = ingredient;
+  const { name, price, pictureUrl, id } = ingredient;
 
   return (
     <View style={styles.container}>
@@ -20,7 +20,7 @@ const IngredientItem = ({ ingredient, handleDeleteIngredient } : props) => {
         color={colors.ELEMENTS_SECONDARY} />
       </TouchableOpacity>
 
-      <Image source={{ uri: "https://www.shutterstock.com/image-photo/tomato-isolated-on-white-background-260nw-2180957565.jpg" }} style={styles.image} />
+      <Image source={{ uri: pictureUrl }} style={styles.image} />
 
       <View style={styles.textContainer}>
         <Text style={styles.name}>{name}</Text>
