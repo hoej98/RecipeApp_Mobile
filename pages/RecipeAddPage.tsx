@@ -1,6 +1,6 @@
-import { Button, Input } from '@rneui/base';
+import { Button, Divider, Input, color } from '@rneui/base';
 import React, {useEffect, useRef, useState} from 'react';
-import { View, Text, StyleSheet, FlatList, Image, TextInput } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Image, TextInput, ScrollView } from 'react-native';
 import axios from "axios";
 import { Ingredient } from '../types/Ingredient';
 import { MultiSelect } from 'react-native-element-dropdown';
@@ -10,66 +10,73 @@ import IngredientItem from '../components/IngredientItemComponent';
 import { RecipeIngredient } from '../types/RecipeIngredient';
 import RecipeIngredientItem from '../components/RecipeIngredientItemComponent';
 import RecipeIngredientSearchItem from '../components/RecipeIngredientISearchtemComponent';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const RecipeAddPage = ({navigation, route}) => {
 
   const [name, setName] = useState<string>();
   const [description, setDescription] = useState<string>();
-  const [selected, setSelected] = useState([]);
-  const [ingredientsList, setIngredientsList] = useState<Ingredient[]>([]);
   const [activeStep, setActiveStep] = useState<number>(0);
   const [ingredients, setIngredients] = useState<RecipeIngredient[]>([{id: "1", name: "Tomato", price: 2, pictureUrl: "https://billiggro.dk/1724-thickbox_default/fro-fra-alf-og-kats-tomat.jpg", amount: "2g"}, {id: "2", name: "Banana", price: 5, pictureUrl: "https://frugt.dk/24455-large_default/banan.jpg", amount: "1 stk"}]);
-  const [searchTerm, setSearchTerm] = useState<string>();
+  const [matchingIngredients, setMatchingIngredients] = useState([]);
+  const [searchTerm, setSearchTerm] = useState<string>("");
   const [finalIngredients, setFinalIngredients] = useState<RecipeIngredient[]>([]);
+  const [pictureURL, setPictureURL] = useState<string>();
 
-    const getAllIngredients = async() => {
-    const response = await axios.get("https://recipeapp2.fly.dev/Ingredient");
-    setIngredientsList(response.data)
+    const getAllIngredients = () => {
+    axios.get("https://recipeapp2.fly.dev/Ingredient").then(response => setIngredients(response.data)).catch(err => console.log("Error occured when getting all ingredients on add recipe view", err))
     }
 
     useEffect(() => {
-        getAllIngredients();
-    })
+      getAllIngredients();
+    }, [])
 
-    const getSelectedIngredients = () => {
-        const selectedIngredients : string[] = [];
-        selected.forEach(async (item) => {
-            const temp : Ingredient | undefined = ingredientsList.find((ingredient : Ingredient) => ingredient.name === item)
-            if (temp !== null)
-            {
-                await selectedIngredients.push(temp.id)
-            }
+    useEffect(() => {
+      if (activeStep == 1)
+      {
+        axios.post("https://recipeapp2.fly.dev/Recipe/generate_image", null, {
+          params: {description: description}
         })
-        return selectedIngredients;
-    }
-
-  const {onAddRecipe} = route.params;
+        .then(
+          //response => setDescription(response.data)
+          response => setPictureURL(response.data)
+        )
+        .catch(err => console.log(err))
+      }
+    }, [activeStep])
 
   const renderButtons = () => {
     return (
       <View style={styles.buttonContainer}>
         {activeStep > 0 && <Button style={{padding: 6, width: 120}} buttonStyle={{backgroundColor: colors.ELEMENTS_PRIMARY}} titleStyle={{color: colors.ELEMENTS_SECONDARY}} onPress={() => {setActiveStep(prev => prev - 1)}}>Previous</Button>}
         {activeStep != 1 && <Button style={{padding: 6, width: 120}} buttonStyle={{backgroundColor: colors.ELEMENTS_PRIMARY}} titleStyle={{color: colors.ELEMENTS_SECONDARY}} onPress={() => {setActiveStep(prev => prev + 1)}}>Next</Button>}
+        {activeStep == 1 && <Button style={{padding: 6, width: 120}} buttonStyle={{backgroundColor: colors.ELEMENTS_PRIMARY}} titleStyle={{color: colors.ELEMENTS_SECONDARY}} onPress={() => {addRecipeRequest(name, description, finalIngredients)}}>Add Recipe</Button>}
       </View>
     )
   }
 
-  const timeoutRef = useRef(null);
-
   useEffect(() => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current)
+    if (searchTerm.length == 0)
+    {
+      setMatchingIngredients([])
     }
-
-    timeoutRef.current = setTimeout(() => {
-      axios.post("https://recipeapp2.fly.dev/Ingredient/search?searchTerm=" + searchTerm).then(response => setIngredients(response.data)).catch(error => console.log(error))
-    }, 400)
-
-    console.log(finalIngredients)
-    
-    return () => clearTimeout(timeoutRef.current);
-
+    else
+      setMatchingIngredients(ingredients.filter(i => i.name?.toLowerCase().includes(searchTerm?.toLowerCase())))
   }, [searchTerm])
+
+  const addRecipeRequest = (name, description, ingredients) => {
+    const requestBody = {name: name, description: description, pictureUrl: pictureURL}
+    const formattedIngredients = ingredients.map(({ id, amount }) => ({ id, amount }))
+    axios.post('https://recipeapp2.fly.dev/Recipe', formattedIngredients, {
+      params: requestBody
+    })
+    .then(response => {
+      navigation.navigate("Recipes")
+    })
+    .catch(error => {
+      console.error('Error:', error, formattedIngredients);
+    });
+  }
 
   return (
     <View style={styles.container}>
@@ -90,21 +97,28 @@ const RecipeAddPage = ({navigation, route}) => {
         </View>
       </Stepper.Step>
       <Stepper.Step label="ingredients">
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', width: 340, marginTop: 40 }}>
-          <Input style={styles.input} placeholder="ingredient name..." value={searchTerm} onChangeText={(value) => {setSearchTerm(value)}}/>
+        <View style={{ flex: 1, width: 340, marginTop: 10, alignItems: "center", justifyContent: "center" }}>
+        <Input style={styles.input} placeholder="ingredient name..." value={searchTerm} onChangeText={(value) => {setSearchTerm(value)}}/>
+          <View style={{marginBottom: 10, zIndex: 1, position: 'absolute',top: 50,bottom: 0,left: 0,right: 0, minHeight: 200}}>
           <FlatList
-            data={ingredients}
+            data={matchingIngredients}
             numColumns={1}
-            renderItem={({item}) => <RecipeIngredientSearchItem recipeIngredient={item} setSearchTerm={setSearchTerm} setIngredients={setIngredients} setFinalIngredients={setFinalIngredients} /> }
+            renderItem={({item}) => <RecipeIngredientSearchItem recipeIngredient={item} setSearchTerm={setSearchTerm} setFinalIngredients={setFinalIngredients} /> }
+            key={1}
           />
+          </View>
           <FlatList
             data={finalIngredients}
             numColumns={1}
             renderItem={({item}) => <RecipeIngredientItem recipeIngredient={item}/> }
+            style={{zIndex: searchTerm == "" && 1}}
+            key={2}
           />
+          </View>
+          <SafeAreaView style={{alignItems: 'center', justifyContent: 'center', width: 340 }}>
           {renderButtons()}
+          </SafeAreaView>
         {/* <Button title="Add Recipe" onPress={() => {onAddRecipe(name, description, getSelectedIngredients())}} /> */}
-        </View>
       </Stepper.Step>
     </Stepper>
     </View>
@@ -146,7 +160,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     position: "absolute",
-    bottom: 20
+    bottom: 20,
   },
 });
 

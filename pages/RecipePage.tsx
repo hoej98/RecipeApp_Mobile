@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { View, StyleSheet, FlatList } from 'react-native';
 import RecipeCardComponent from '../components/RecipeCardComponent';
 import { Recipe } from '../types/Recipe';
@@ -6,10 +6,17 @@ import axios from 'axios';
 import { Button } from '@rneui/base/dist/Button';
 import { Ingredient } from '../types/Ingredient';
 import { colors } from '../assets/theme';
+import { useFocusEffect } from '@react-navigation/native';
 
 const RecipePage = ({navigation}) => {
 
-  const [recipes, setRecipes] = useState<Recipe[]>();
+  useFocusEffect(
+    useCallback(() => {
+      getRecipes();
+    }, [])
+  )
+
+  const [recipes, setRecipes] = useState<Recipe[]>([]);
 
   const getRecipes = async() => {
     const response = await axios.get("https://recipeapp2.fly.dev/Recipe");
@@ -24,21 +31,12 @@ const RecipePage = ({navigation}) => {
     return <View><RecipeCardComponent navigation={navigation} recipe={recipe} /></View>
   }
 
-  const handleAddRecipe = async (name: string, description: string, ingredients: string[],  ) => {
-    var ingredients_formatted = ""
-    ingredients.forEach((ingredient) => {ingredients_formatted = ingredients_formatted.concat(ingredients_formatted, "&ingredientIds", ingredient)})
-
-    await axios.post("https://recipeapp2.fly.dev/Recipe?name=" + name + ingredients_formatted + "&pictureUrl=test" + "&description=" + description)
-    await getRecipes();
-    navigation.navigate('Recipes')
-  }
-
   return (
     <View style={styles.container}>
           <View style={styles.app}>
-            <Button style={styles.button} buttonStyle={{borderRadius: 8, backgroundColor: colors.ELEMENTS_PRIMARY}} titleStyle={{color: colors.ELEMENTS_SECONDARY}} title="Add new Recipe" onPress={() => {navigation.navigate('AddRecipe', {onAddRecipe: handleAddRecipe})}}/> 
+            <Button style={styles.button} buttonStyle={{borderRadius: 8, backgroundColor: colors.ELEMENTS_PRIMARY}} titleStyle={{color: colors.ELEMENTS_SECONDARY}} title="Add new Recipe" onPress={() => {navigation.navigate('AddRecipe')}}/> 
           <FlatList
-            data={recipes}
+            data={recipes.sort((a, b) => a.name.localeCompare(b.name))}
             numColumns={2}
             renderItem={({item}) => <RecipeCard recipe={item}/>}
           />

@@ -8,7 +8,7 @@ import { colors } from '../assets/theme';
 
 const IngredientPage = ({navigation}) => {
 
-  const [ingredients, setIngredients] = useState<Ingredient[]>();
+  const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   const getIngredients = async() => {
@@ -56,7 +56,7 @@ const IngredientPage = ({navigation}) => {
       refreshControl={
         <RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh}/>
       }>
-      {ingredients?.map((ingredient) => {
+      {ingredients.sort((a, b) => a.name.localeCompare(b.name))?.map((ingredient) => {
         return (
           <IngredientItem ingredient={ingredient} handleDeleteIngredient={handleDeleteIngredient} />
         )

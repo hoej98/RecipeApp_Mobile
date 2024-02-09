@@ -6,16 +6,15 @@ import { RecipeIngredient } from '../types/RecipeIngredient';
 type props = {
     recipeIngredient: RecipeIngredient,
     setSearchTerm: Dispatch<SetStateAction<string>>,
-    setIngredients: Dispatch<SetStateAction<RecipeIngredient[]>>,
     setFinalIngredients: Dispatch<SetStateAction<RecipeIngredient[]>>,
 }
 
-const RecipeIngredientSearchItem = ({ recipeIngredient, setSearchTerm, setIngredients, setFinalIngredients } : props) => {
+const RecipeIngredientSearchItem = ({ recipeIngredient, setSearchTerm, setFinalIngredients } : props) => {
 
     const [amount, setAmount] = useState<string>(recipeIngredient.amount);
 
 return(
-<TouchableOpacity onPress={() => {setSearchTerm(""); setIngredients([]); setFinalIngredients(prev => [...prev, recipeIngredient]) }}>
+<TouchableOpacity onPress={() => {setSearchTerm(""); setFinalIngredients(prev => [...prev, recipeIngredient]) }}>
 <View style={styles.ingredientListContainer}>
 <Image source={{ uri: recipeIngredient.pictureUrl }} style={styles.image} />
 <View style={styles.content}>
@@ -41,7 +40,8 @@ const styles = StyleSheet.create({image: {
     width: 340,
     borderWidth: 1,
     borderColor: colors.ELEMENTS_PRIMARY,
-    marginBottom: 4
+    marginBottom: 4,
+    backgroundColor: "lightgrey"
   },
   content: {
     flex: 1,
