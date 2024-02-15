@@ -11,7 +11,7 @@ type props = {
 
 const RecipeCardComponent: React.FC<props> = ({navigation, recipe}) => {
   return (
-    <TouchableOpacity onPress={() => {navigation.navigate('RecipeDetails')}}>
+    <TouchableOpacity onPress={() => {navigation.navigate('RecipeDetails', recipe)}}>
     <View style={styles.container}>
         <Card>
             <Card.Title>{recipe.name}</Card.Title>
