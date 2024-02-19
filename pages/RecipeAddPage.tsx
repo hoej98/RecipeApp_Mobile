@@ -17,7 +17,7 @@ const RecipeAddPage = ({navigation, route}) => {
   const [name, setName] = useState<string>();
   const [description, setDescription] = useState<string>();
   const [activeStep, setActiveStep] = useState<number>(0);
-  const [ingredients, setIngredients] = useState<RecipeIngredient[]>([{id: "1", name: "Tomato", price: 2, pictureUrl: "https://billiggro.dk/1724-thickbox_default/fro-fra-alf-og-kats-tomat.jpg", amount: "2g"}, {id: "2", name: "Banana", price: 5, pictureUrl: "https://frugt.dk/24455-large_default/banan.jpg", amount: "1 stk"}]);
+  const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [matchingIngredients, setMatchingIngredients] = useState([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [finalIngredients, setFinalIngredients] = useState<RecipeIngredient[]>([]);
@@ -106,14 +106,14 @@ const RecipeAddPage = ({navigation, route}) => {
             keyboardShouldPersistTaps
             data={matchingIngredients}
             numColumns={1}
-            renderItem={({item}) => <RecipeIngredientSearchItem recipeIngredient={item} setSearchTerm={setSearchTerm} setFinalIngredients={setFinalIngredients} /> }
+            renderItem={({item}) => <RecipeIngredientSearchItem ingredient={item} setSearchTerm={setSearchTerm} setFinalIngredients={setFinalIngredients} /> }
             key={1}
           />
           </View>
           <FlatList
             data={finalIngredients}
             numColumns={1}
-            renderItem={({item}) => <RecipeIngredientItem recipeIngredient={item}/> }
+            renderItem={({item}) => <RecipeIngredientItem recipeIngredient={item} setFinalIngredients={setFinalIngredients} /> }
             style={{zIndex: searchTerm == "" && 1}}
             key={2}
           />

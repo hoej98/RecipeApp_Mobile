@@ -1,7 +1,7 @@
-import React from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, Image, TouchableOpacity, StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import { Ingredient } from '../types/Ingredient';
-import { Icon } from '@rneui/base';
+import { Button, Dialog, Icon } from '@rneui/base';
 import { colors } from '../assets/theme';
 
 type props = {
@@ -11,6 +11,12 @@ type props = {
 
 const IngredientItem = ({ ingredient, handleDeleteIngredient } : props) => {
   const { name, price, pictureUrl, id } = ingredient;
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const handleDelete = () => {
+    handleDeleteIngredient(ingredient.id);
+    setIsDeleting(false);
+  }
 
   return (
     <View style={styles.container}>
@@ -27,11 +33,19 @@ const IngredientItem = ({ ingredient, handleDeleteIngredient } : props) => {
         <Text style={styles.price}>kr. {price}</Text>
       </View>
 
-      <TouchableOpacity style={styles.removeButton} onPress={() => {handleDeleteIngredient(id)}}>
+      <TouchableOpacity style={styles.removeButton} onPress={() => {setIsDeleting(true)}}>
       <Icon
         name='delete'
         color={colors.ELEMENTS_SECONDARY} />
       </TouchableOpacity>
+      <Dialog
+      isVisible={isDeleting}
+      onBackdropPress={() => {setIsDeleting(false)}}
+      overlayStyle={{backgroundColor: "white"}}
+    >
+      <Dialog.Title title={"Delete ingredient with name " + ingredient.name + "?"}/>
+      <Button title="delete" onPress={handleDelete} />
+    </Dialog>
     </View>
   );
 };

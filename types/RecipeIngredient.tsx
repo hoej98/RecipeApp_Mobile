@@ -1,7 +1,7 @@
 export type RecipeIngredient = {
     id: string,
-    name: string,
-    price: number,
-    pictureUrl?: string,
+    ingredientName: string,
+    ingredientPrice: number,
+    ingredientPictureUrl?: string,
     amount?: string
 }

@@ -1,7 +1,8 @@
-import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, Image, StyleSheet, TouchableWithoutFeedback, Button } from 'react-native';
 import { RecipeIngredient } from '../types/RecipeIngredient';
 import { colors } from '../assets/theme';
+import { Dialog } from '@rneui/base';
 
 type props = {
   recipeIngredient : RecipeIngredient}
@@ -12,12 +13,12 @@ const RecipeDetailsIngredientItem = ({ recipeIngredient } : props) => {
     <View style={styles.container}>
       <View style={styles.imageContainer}>
         <Image
-          source={{ uri: recipeIngredient.pictureUrl }}
+          source={{ uri: recipeIngredient.ingredientPictureUrl }}
           style={styles.image}
         />
       </View>
       <View style={styles.detailsContainer}>
-        <Text style={styles.name}>{recipeIngredient.name}</Text>
+        <Text style={styles.name}>{recipeIngredient.ingredientName}</Text>
         <Text style={styles.amount}>{recipeIngredient.amount}</Text>
       </View>
     </View>

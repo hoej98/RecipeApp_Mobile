@@ -1,21 +1,30 @@
-import React, { useState } from 'react';
-import { View, Text, Image, StyleSheet, TextInput } from 'react-native';
+import React, { Dispatch, SetStateAction, useState } from 'react';
+import { View, Text, Image, StyleSheet, TextInput, TouchableWithoutFeedback, Button } from 'react-native';
 import { colors } from '../assets/theme';
 import { RecipeIngredient } from '../types/RecipeIngredient';
+import { Dialog } from '@rneui/base';
 
 type props = {
     recipeIngredient: RecipeIngredient,
+    setFinalIngredients: Dispatch<SetStateAction<RecipeIngredient[]>>,
 }
 
-const RecipeIngredientItem = ({ recipeIngredient } : props) => {
+const RecipeIngredientItem = ({ recipeIngredient, setFinalIngredients } : props) => {
 
     const [amount, setAmount] = useState<string>(recipeIngredient.amount);
+    const [isDeleting, setIsDeleting] = useState(false);
+
+    const handleDelete = () => {
+      setFinalIngredients(prev => prev.filter(ingredient => ingredient.id != recipeIngredient.id))
+      setIsDeleting(false);
+    }
 
 return(
+  <TouchableWithoutFeedback onLongPress={() => {setIsDeleting(true)}}>
 <View style={styles.ingredientListContainer}>
-<Image source={{ uri: recipeIngredient.pictureUrl }} style={styles.image} />
+<Image source={{ uri: recipeIngredient.ingredientPictureUrl }} style={styles.image} />
 <View style={styles.content}>
-<Text style={styles.name}>{recipeIngredient.name}</Text>
+<Text style={styles.name}>{recipeIngredient.ingredientName}</Text>
 <TextInput
   style={styles.amountInput}
   placeholder="Enter text"
@@ -23,7 +32,16 @@ return(
   onChangeText={(value) => {setAmount(value); recipeIngredient.amount = value}}
 />
 </View>
+<Dialog
+      isVisible={isDeleting}
+      onBackdropPress={() => {setIsDeleting(false)}}
+      overlayStyle={{backgroundColor: "white"}}
+    >
+      <Dialog.Title title={"Delete ingredient with name " + recipeIngredient.ingredientName + "?"}/>
+      <Button title='Delete' onPress={handleDelete} />
+    </Dialog>
 </View>
+</TouchableWithoutFeedback>
 )}
 
 const styles = StyleSheet.create({image: {

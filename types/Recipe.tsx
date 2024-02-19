@@ -5,5 +5,5 @@ export type Recipe = {
     id: string,
     name: string,
     pictureUrl: string,
-    ingredients: RecipeIngredient[]
+    recipeIngredients: RecipeIngredient[]
 }

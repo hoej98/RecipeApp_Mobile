@@ -1,14 +1,29 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, Image, ScrollView, StyleSheet } from 'react-native';
 import IngredientItem from '../components/IngredientItemComponent';
 import RecipeIngredientSearchItem from '../components/RecipeIngredientISearchtemComponent';
 import RecipeDetailsIngredientItem from '../components/RecipeDetailsIngredientItemComponent';
 import { Recipe } from '../types/Recipe';
+import { Button, Dialog } from '@rneui/base';
+import { colors } from '../assets/theme';
+import axios from 'axios';
 
-const RecipeDetailsPage = ({route}) => {
+const RecipeDetailsPage = ({route, navigation}) => {
 
   const recipe : Recipe = route.params;
+
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const deleteRecipe = async (id: string) => {
+    await axios.delete("https://recipeapp2.fly.dev/Recipe?id=" + id)
+    navigation.navigate("Recipes")
+  }
+
+  const handleDelete = () => {
+    setIsDeleting(false);
+    deleteRecipe(recipe.id);
+  }
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -21,13 +36,25 @@ const RecipeDetailsPage = ({route}) => {
         <Text style={styles.description}>Italian style lasagna with mozzarella on top</Text>
       </View>
       <ScrollView style={styles.ingredientsContainer}>
-        {recipe.ingredients.map((ingredient) => {
+        {recipe.recipeIngredients.map((ingredient) => {
           return (
             <RecipeDetailsIngredientItem recipeIngredient={ingredient} />
           )
         })}
         
       </ScrollView>
+      <View style={styles.buttonContainer}>
+    <Button style={{padding: 6, width: 120}} buttonStyle={{backgroundColor: colors.ELEMENTS_PRIMARY}} titleStyle={{color: colors.ELEMENTS_SECONDARY, fontSize: 12}}>Edit Recipe</Button>
+    <Button style={{padding: 6, width: 120}} buttonStyle={{backgroundColor: colors.ELEMENTS_PRIMARY}} titleStyle={{color: colors.ELEMENTS_SECONDARY, fontSize: 12}} onPress={() => {setIsDeleting(true)}}>Delete Recipe</Button>
+      </View>
+      <Dialog
+      isVisible={isDeleting}
+      onBackdropPress={() => {setIsDeleting(false)}}
+      overlayStyle={{backgroundColor: "white"}}
+    >
+      <Dialog.Title title={"Delete recipe with name " + recipe.name + "?"}/>
+      <Button title='Delete' onPress={handleDelete} />
+    </Dialog>
     </ScrollView>
   );
 };
@@ -61,6 +88,12 @@ const styles = StyleSheet.create({
   },
   ingredientsContainer: {
     width: '80%',
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    position: "absolute",
+    bottom: 20
   },
 });
 

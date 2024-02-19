@@ -2,23 +2,24 @@ import React, { Dispatch, SetStateAction, useState } from 'react';
 import { View, Text, Image, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { colors } from '../assets/theme';
 import { RecipeIngredient } from '../types/RecipeIngredient';
+import { Ingredient } from '../types/Ingredient';
 
 type props = {
-    recipeIngredient: RecipeIngredient,
+    ingredient: Ingredient,
     setSearchTerm: Dispatch<SetStateAction<string>>,
     setFinalIngredients: Dispatch<SetStateAction<RecipeIngredient[]>>,
 }
 
-const RecipeIngredientSearchItem = ({ recipeIngredient, setSearchTerm, setFinalIngredients } : props) => {
+const RecipeIngredientSearchItem = ({ ingredient, setSearchTerm, setFinalIngredients } : props) => {
 
-    const [amount, setAmount] = useState<string>(recipeIngredient.amount);
+    const [amount, setAmount] = useState<string>();
 
 return(
-<TouchableOpacity onPress={() => {setSearchTerm(""); setFinalIngredients(prev => [...prev, recipeIngredient]) }}>
+<TouchableOpacity onPress={() => {setSearchTerm(""); setFinalIngredients(prev => [...prev, {ingredientName: ingredient.name, ingredientPrice: ingredient.price, ingredientPictureUrl: ingredient.pictureUrl, id: ingredient.id}]) }}>
 <View style={styles.ingredientListContainer}>
-<Image source={{ uri: recipeIngredient.pictureUrl }} style={styles.image} />
+<Image source={{ uri: ingredient.pictureUrl }} style={styles.image} />
 <View style={styles.content}>
-<Text style={styles.name}>{recipeIngredient.name}</Text>
+<Text style={styles.name}>{ingredient.name}</Text>
 </View>
 </View>
 </TouchableOpacity>
