@@ -33,7 +33,7 @@ const RecipeDetailsPage = ({route, navigation}) => {
         style={styles.image}
       />
       <View style={styles.descriptionContainer}>
-        <Text style={styles.description}>Italian style lasagna with mozzarella on top</Text>
+        <Text style={styles.description}>{recipe.description}</Text>
       </View>
       <ScrollView style={styles.ingredientsContainer}>
         {recipe.recipeIngredients.map((ingredient) => {
