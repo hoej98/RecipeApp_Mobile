@@ -11,6 +11,7 @@ import { RecipeIngredient } from '../types/RecipeIngredient';
 import RecipeIngredientItem from '../components/RecipeIngredientItemComponent';
 import RecipeIngredientSearchItem from '../components/RecipeIngredientISearchtemComponent';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import IngredientOnRecipeAdder from '../components/IngredientOnRecipeAdder';
 
 const RecipeAddPage = ({navigation, route}) => {
 
@@ -21,6 +22,7 @@ const RecipeAddPage = ({navigation, route}) => {
   const [matchingIngredients, setMatchingIngredients] = useState([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [finalIngredients, setFinalIngredients] = useState<RecipeIngredient[]>([]);
+  const [newFinalIngredients, setNewFinalIngredients] = useState<RecipeIngredient[]>([]);
   const [pictureURL, setPictureURL] = useState<string>();
 
     const getAllIngredients = () => {
@@ -78,6 +80,8 @@ const RecipeAddPage = ({navigation, route}) => {
     });
   }
 
+
+
   return (
     <View style={styles.container}>
           <Stepper
@@ -102,16 +106,20 @@ const RecipeAddPage = ({navigation, route}) => {
         <View style={{ flex: 1, width: 340, marginTop: 10, alignItems: "center", justifyContent: "center" }}>
         <Input style={styles.input} placeholder="ingredient name..." value={searchTerm} onChangeText={(value) => {setSearchTerm(value)}}/>
           <View style={{marginBottom: 10, zIndex: 1, position: 'absolute',top: 50,bottom: 0,left: 0,right: 0, minHeight: 200}}>
-          <FlatList
+            {matchingIngredients.length > 0 &&           
+            <FlatList
             keyboardShouldPersistTaps
             data={matchingIngredients}
             numColumns={1}
             renderItem={({item}) => <RecipeIngredientSearchItem ingredient={item} setSearchTerm={setSearchTerm} setFinalIngredients={setFinalIngredients} /> }
             key={1}
-          />
+          />}
+            {matchingIngredients.length == 0 && searchTerm.length != 0 && 
+            <IngredientOnRecipeAdder setSearchTerm={setSearchTerm} setNewFinalIngredients={setNewFinalIngredients} />
+            }
           </View>
           <FlatList
-            data={finalIngredients}
+            data={finalIngredients.concat(newFinalIngredients)}
             numColumns={1}
             renderItem={({item}) => <RecipeIngredientItem recipeIngredient={item} setFinalIngredients={setFinalIngredients} /> }
             style={{zIndex: searchTerm == "" && 1}}
@@ -121,7 +129,6 @@ const RecipeAddPage = ({navigation, route}) => {
           <SafeAreaView style={{alignItems: 'center', justifyContent: 'center', width: 340 }}>
           {renderButtons()}
           </SafeAreaView>
-        {/* <Button title="Add Recipe" onPress={() => {onAddRecipe(name, description, getSelectedIngredients())}} /> */}
       </Stepper.Step>
     </Stepper>
     </View>
