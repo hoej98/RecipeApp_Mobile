@@ -9,6 +9,8 @@ import RecipeDetailsPage from './pages/RecipeDetailsPage';
 import IngredientAddPage from './pages/IngredientAddPage';
 import RecipeAddPage from './pages/RecipeAddPage';
 import { colors } from './assets/theme';
+import { gestureHandlerRootHOC } from 'react-native-gesture-handler';
+
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -62,7 +64,7 @@ const App = () => {
         }
         )}
       >
-      <Tab.Screen name="RecipesStack" options={{headerShown: false}} component={RecipeStack} />
+      <Tab.Screen name="RecipesStack" options={{headerShown: false}} component={RecipeStack}  />
       <Tab.Screen name="IngredientStack" options={{headerShown: false}} component={IngredientStack} />
   </Tab.Navigator>
 </NavigationContainer>
