@@ -38,7 +38,7 @@ const RecipePage = ({navigation}) => {
           <FlatList
             data={recipes.sort((a, b) => a.name.localeCompare(b.name))}
             numColumns={2}
-            renderItem={({item}) => <RecipeCard recipe={item}/>}
+            renderItem={({item}) => <RecipeCard recipe={item} key="1"/>}
           />
         </View>
     </View>

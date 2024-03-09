@@ -9,7 +9,6 @@ import RecipeDetailsPage from './pages/RecipeDetailsPage';
 import IngredientAddPage from './pages/IngredientAddPage';
 import RecipeAddPage from './pages/RecipeAddPage';
 import { colors } from './assets/theme';
-import { gestureHandlerRootHOC } from 'react-native-gesture-handler';
 
 
 const Stack = createStackNavigator();

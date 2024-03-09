@@ -3,7 +3,6 @@ import React, {useEffect, useRef, useState} from 'react';
 import { View, Text, StyleSheet, FlatList, Image, TextInput, ScrollView, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import axios from "axios";
 import { Ingredient } from '../types/Ingredient';
-import { MultiSelect } from 'react-native-element-dropdown';
 import Stepper from 'react-native-stepper-view';
 import { colors } from '../assets/theme';
 import IngredientItem from '../components/IngredientItemComponent';

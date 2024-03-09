@@ -1,38 +1,18 @@
 {
   "cli": {
-    "version": ">= 6.0.0",
-    "promptToConfigurePushNotifications": false
+    "version": ">= 7.3.0"
   },
   "build": {
     "development": {
       "developmentClient": true,
-      "distribution": "internal",
-      "ios": {
-        "image": "macos-ventura-13.6-xcode-15.2",
-        "enterpriseProvisioning": "adhoc"
-      }
+      "distribution": "internal"
     },
     "preview": {
-      "distribution": "internal",
-      "ios": {
-        "enterpriseProvisioning": "adhoc",
-        "image": "macos-ventura-13.6-xcode-15.2"
-      }
+      "distribution": "internal"
     },
-    "production": {
-    "distribution": "internal",
-    "ios": {
-      "enterpriseProvisioning": "adhoc",
-      "image": "macos-ventura-13.6-xcode-15.2"
-    }}
+    "production": {}
   },
   "submit": {
-    "production": {
-      "ios":{
-        "ascApiKeyPath": "/Users/mikkelhojhansen/Documents/GitHub/RecipeApp_Mobile/AppStoreConnect/AuthKey_UK58L48D35.p8",
-        "ascApiKeyIssuerId": "74836485-274d-40c9-85bd-f47da2e57fbb",
-        "ascApiKeyId": "UK58L48D35"
-      }
-    }
+    "production": {}
   }
 }
