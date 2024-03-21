@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet, TextInput, TouchableOpacity} from 'react-native';
 import { colors } from '../assets/theme';
 import { RecipeIngredient } from '../types/RecipeIngredient';
@@ -9,12 +9,13 @@ import { Button, Input } from '@rneui/base';
 type props = {
     setSearchTerm: Dispatch<SetStateAction<string>>,
     setNewFinalIngredients: Dispatch<SetStateAction<RecipeIngredient[]>>,
+    initialName: string,
 }
 
-const IngredientOnRecipeAdder = ({ setSearchTerm, setNewFinalIngredients } : props) => {
+const IngredientOnRecipeAdder = ({ setSearchTerm, setNewFinalIngredients, initialName } : props) => {
 
     const [isDialogOpen, setIsDialogOpen] = useState(false);
-    const [name, setName] = useState("");
+    const [name, setName] = useState(initialName);
     const [price, setPrice] = useState(0);
     const [amount, setAmount] = useState("");
 
@@ -23,6 +24,10 @@ const IngredientOnRecipeAdder = ({ setSearchTerm, setNewFinalIngredients } : pro
         setSearchTerm("");
         setIsDialogOpen(false);
     }
+
+    useEffect(() => {
+      setName(initialName);
+    }, [initialName])
 
 return(
 <TouchableOpacity onPress={() => {setIsDialogOpen(true)}}>
@@ -36,9 +41,9 @@ return(
       overlayStyle={{backgroundColor: "white"}}
     >
       <Dialog.Title title={"add new Ingredient"}/>
-        <Input style={styles.input} placeholder='name' onChangeText={value => setName(value)}></Input>
-        <Input style={styles.input} placeholder='price pr unit' onChangeText={value => setPrice(parseFloat(value))}></Input>
-        <Input style={styles.input} placeholder='amount' onChangeText={value => setAmount(value)}></Input>
+        <Input style={styles.input} placeholder='name' value={name} onChangeText={value => setName(value)}></Input>
+        <Input style={styles.input} placeholder='price pr unit' value={price.toString()} onChangeText={value => value == "" ? setPrice(0) : setPrice(parseFloat(value))}></Input>
+        <Input style={styles.input} placeholder='amount' value={amount} onChangeText={value => setAmount(value)}></Input>
       <Button style={{padding: 6, width: 250}} buttonStyle={{backgroundColor: colors.ELEMENTS_PRIMARY}} titleStyle={{color: colors.ELEMENTS_SECONDARY, fontSize: 16}} onPress={handleAdd}>Add Ingredient</Button>
     </Dialog>
 </View>
