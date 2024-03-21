@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "RecipeApp_mobile",
-    "slug": "RecipeApp_mobile",
-    "version": "1.0.6",
+    "name": "recipeApp_lsh_mhh",
+    "slug": "recipeApp_lsh_mhh",
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -15,8 +15,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "recipeapp.expo"
+      "supportsTablet": false,
+      "bundleIdentifier": "com.hoej98.recipeApp"
     },
     "android": {
       "adaptiveIcon": {
@@ -29,14 +29,8 @@
     },
     "extra": {
       "eas": {
-        "projectId": "d9b2c22b-be20-44f3-bbb4-9e773e41ec38"
+        "projectId": "4723a6b0-4866-47b1-b870-c7dc213419e1"
       }
-    },
-    "runtimeVersion": {
-      "policy": "appVersion"
-    },
-    "updates": {
-      "url": "https://u.expo.dev/d9b2c22b-be20-44f3-bbb4-9e773e41ec38"
     }
   }
 }

@@ -3,7 +3,6 @@ import React, {useEffect, useRef, useState} from 'react';
 import { View, Text, StyleSheet, FlatList, Image, TextInput, ScrollView, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import axios from "axios";
 import { Ingredient } from '../types/Ingredient';
-import { MultiSelect } from 'react-native-element-dropdown';
 import Stepper from 'react-native-stepper-view';
 import { colors } from '../assets/theme';
 import IngredientItem from '../components/IngredientItemComponent';
@@ -96,15 +95,15 @@ const RecipeAddPage = ({navigation, route}) => {
       <Stepper.Step label="information">
       <TouchableWithoutFeedback onPress={() => {Keyboard.dismiss()}}>
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', marginTop: -200, width: 340 }}>
-        <Input style={styles.input} placeholder="Recipe Name" onChangeText={value => setName(value)} />
-        <Input style={styles.input} inputStyle={{height: 100}} multiline placeholder="Description" onChangeText={value => setDescription(value)} />
+        <Input value={name} style={styles.input} placeholder="Recipe Name" onChangeText={value => setName(value)} />
+        <Input value={description} style={styles.input} inputStyle={{height: 100}} multiline placeholder="Description" onChangeText={value => setDescription(value)} />
         {renderButtons()}
         </View>
         </TouchableWithoutFeedback>
       </Stepper.Step>
       <Stepper.Step label="ingredients">
         <View style={{ flex: 1, width: 340, marginTop: 10, alignItems: "center", justifyContent: "center" }}>
-        <Input style={styles.input} placeholder="ingredient name..." value={searchTerm} onChangeText={(value) => {setSearchTerm(value)}}/>
+        <Input autoCorrect={false} style={styles.input} placeholder="ingredient name..." value={searchTerm} onChangeText={(value) => {setSearchTerm(value)}}/>
           <View style={{marginBottom: 10, zIndex: 1, position: 'absolute',top: 50,bottom: 0,left: 0,right: 0, minHeight: 200}}>
             {matchingIngredients.length > 0 &&           
             <FlatList
@@ -115,7 +114,7 @@ const RecipeAddPage = ({navigation, route}) => {
             key={1}
           />}
             {matchingIngredients.length == 0 && searchTerm.length != 0 && 
-            <IngredientOnRecipeAdder setSearchTerm={setSearchTerm} setNewFinalIngredients={setNewFinalIngredients} />
+            <IngredientOnRecipeAdder setSearchTerm={setSearchTerm} setNewFinalIngredients={setNewFinalIngredients} initialName={searchTerm}/>
             }
           </View>
           <FlatList

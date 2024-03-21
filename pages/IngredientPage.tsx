@@ -58,7 +58,7 @@ const IngredientPage = ({navigation}) => {
       }>
       {ingredients.sort((a, b) => a.name.localeCompare(b.name))?.map((ingredient) => {
         return (
-          <IngredientItem ingredient={ingredient} handleDeleteIngredient={handleDeleteIngredient} />
+          <IngredientItem ingredient={ingredient} handleDeleteIngredient={handleDeleteIngredient} key="1"/>
         )
       })}
       </ScrollView>

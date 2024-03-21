@@ -10,19 +10,18 @@ type props = {
 }
 
 const RecipeCardComponent: React.FC<props> = ({navigation, recipe}) => {
+
   return (
-    <TouchableOpacity onPress={() => {navigation.navigate('RecipeDetails', recipe)}}>
-    <View style={styles.container}>
-        <Card>
-            <Card.Title>{recipe.name}</Card.Title>
+    <TouchableOpacity style={styles.itemContainer} onPress={() => {navigation.navigate('RecipeDetails', recipe)}}>
+        {/* <Card containerStyle= {{width: "100%", margin: "2.5%"}}>
+            <Card.Title style={{minWidth: "100%"}}>{recipe.name}</Card.Title>
             <View>
                 <Image style={styles.image} source={{uri: recipe.pictureUrl}} />
             </View>
             <View style={styles.text_container}>
             <Text style={styles.text}>{recipe.recipeIngredients[0]?.ingredientPrice} Kr.</Text>
             </View>
-        </Card>
-    </View>
+        </Card> */}
     </TouchableOpacity>
   );
 };
@@ -30,16 +29,23 @@ const RecipeCardComponent: React.FC<props> = ({navigation, recipe}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    margin: 5,
+    height: 100,
+  },
+  itemContainer: {
+    height: 150,
+    borderRadius: 5,
+    marginBottom: 10,
+    justifyContent: "center",
+    alignItems: "center"
   },
   text: {
     fontSize: 18,
     fontWeight: 'bold',
   },
   image: {
-    width: 132,
-    height: 100
+    width: "100%",
+    height: "100%"
   },
   text_container: {
     flex: 1,
