@@ -51,7 +51,7 @@ const RecipeAddPage = ({navigation, route}) => {
       <View style={styles.buttonContainer}>
         {activeStep > 0 && <Button style={{padding: 6, width: 120}} buttonStyle={{backgroundColor: colors.ELEMENTS_PRIMARY}} titleStyle={{color: colors.ELEMENTS_SECONDARY, fontSize: 16}} onPress={() => {setActiveStep(prev => prev - 1)}}>Previous</Button>}
         {activeStep != 1 && <Button style={{padding: 6, width: 120}} buttonStyle={{backgroundColor: colors.ELEMENTS_PRIMARY}} titleStyle={{color: colors.ELEMENTS_SECONDARY, fontSize: 16}} onPress={() => {setActiveStep(prev => prev + 1)}}>Next</Button>}
-        {activeStep == 1 && <Button style={{padding: 6, width: 120}} buttonStyle={{backgroundColor: colors.ELEMENTS_PRIMARY}} titleStyle={{color: colors.ELEMENTS_SECONDARY, fontSize: 16}} onPress={() => {addRecipeRequest(name, description, finalIngredients)}}>Add Recipe</Button>}
+        {activeStep == 1 && <Button style={{padding: 6, width: 120}} buttonStyle={{backgroundColor: colors.ELEMENTS_PRIMARY}} titleStyle={{color: colors.ELEMENTS_SECONDARY, fontSize: 16}} onPress={() => {addRecipeRequest(name, description, finalIngredients, newFinalIngredients)}}>Add Recipe</Button>}
       </View>
     )
   }
@@ -65,12 +65,17 @@ const RecipeAddPage = ({navigation, route}) => {
       setMatchingIngredients(ingredients.filter(i => i.name?.toLowerCase().includes(searchTerm?.toLowerCase())))
   }, [searchTerm])
 
-  const addRecipeRequest = (name, description, ingredients) => {
-    const requestBody = {name: name, description: description, pictureUrl: pictureURL}
+  const addRecipeRequest = (name, description, ingredients, newIngredients) => {
     const formattedIngredients = ingredients.map(({ id, amount }) => ({ id, amount }))
-    axios.post('https://recipeapp2.fly.dev/Recipe', formattedIngredients, {
-      params: requestBody
-    })
+    console.log(name, description, formattedIngredients, newIngredients, pictureURL)
+    axios.post('https://recipeapp2.fly.dev/Recipe/add_recipe_with_new_ingredients',
+    {
+      description: description,
+      ingredients: formattedIngredients,
+      name: name,
+      newIngredients: newIngredients,
+      pictureUrl: pictureURL
+    },)
     .then(response => {
       navigation.navigate("Recipes")
     })
