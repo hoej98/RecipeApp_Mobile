@@ -14,7 +14,7 @@ const IngredientAddPage = ({navigation, route}) => {
     <View style={styles.container}>
         <Input style={styles.input} placeholder="Ingredient Name" onChangeText={value => setName(value)} />
         <Input placeholder="Price" onChangeText={value => setPrice(parseFloat(value))} />
-        <Button title="Add Ingredient" onPress={() => {onAddIngredient(name, price)}} />
+        <Button title="Add Ingredient" onPress={() => {onAddIngredient(name, price); navigation.navigate("Ingredients")}} />
     </View>
   );
 };

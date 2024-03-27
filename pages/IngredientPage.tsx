@@ -1,31 +1,17 @@
 import { Button, ListItem, Tab } from '@rneui/base';
 import axios from 'axios';
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import { View, Text, StyleSheet, ScrollView, RefreshControl } from 'react-native'; 
 import {Ingredient} from "../types/Ingredient"
 import IngredientItem from '../components/IngredientItemComponent';
 import { colors } from '../assets/theme';
+import { IngredientContext } from '../context/IngredientContext';
 
 const IngredientPage = ({navigation}) => {
 
-  const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
-  const getIngredients = async() => {
-    const temp_ingredients = await axios.get("https://recipeapp2.fly.dev/Ingredient")
-    setIngredients(temp_ingredients.data)
-  }
-
-  const handleAddIngredient = async(name: string, price: number) => {
-    await axios.post("https://recipeapp2.fly.dev/Ingredient?name=" + name + "&price=" + price)
-    await getIngredients();
-    navigation.navigate('Ingredients')
-  }
-
-  const handleDeleteIngredient = async(id: string) => {
-    await axios.delete("https://recipeapp2.fly.dev/Ingredient?id=" + id)
-    await getIngredients();
-  }
+const {ingredients, addIngredient, deleteIngredient, getIngredients } = useContext(IngredientContext);
 
   const handleRefresh = async() => {
     setIsRefreshing(true);
@@ -40,17 +26,7 @@ const IngredientPage = ({navigation}) => {
   return (
     <View style={styles.globalAppContainer}>
     <View style={styles.container}>
-      <Button style={styles.button} buttonStyle={{borderRadius: 8}} title="Add new ingredient" titleStyle={{color: colors.ELEMENTS_SECONDARY}} color={colors.ELEMENTS_PRIMARY} onPress={() => {navigation.navigate('AddIngredient', {onAddIngredient: handleAddIngredient})}}/> 
-      {/* <View style={styles.list}>
-        {ingredients?.map((ingredient) => {
-          return( 
-          <ListItem style={styles.listitem}>
-            <Text style={styles.text}> {ingredient.name} - {ingredient.price}kr</Text>
-            <Button title="X" onPress={() => handleDeleteIngredient(ingredient.id)} />
-          </ListItem>
-          )
-        })}
-      </View> */}
+      <Button style={styles.button} buttonStyle={{borderRadius: 8}} title="Add new ingredient" titleStyle={{color: colors.ELEMENTS_SECONDARY}} color={colors.ELEMENTS_PRIMARY} onPress={() => {navigation.navigate('AddIngredient', {onAddIngredient: addIngredient})}}/> 
       <ScrollView 
       style={{width: 360}}
       refreshControl={
@@ -58,7 +34,7 @@ const IngredientPage = ({navigation}) => {
       }>
       {ingredients.sort((a, b) => a.name.localeCompare(b.name))?.map((ingredient) => {
         return (
-          <IngredientItem ingredient={ingredient} handleDeleteIngredient={handleDeleteIngredient} key="1"/>
+          <IngredientItem ingredient={ingredient} handleDeleteIngredient={deleteIngredient} key={ingredient.id}/>
         )
       })}
       </ScrollView>
