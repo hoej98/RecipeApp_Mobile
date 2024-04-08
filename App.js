@@ -10,6 +10,7 @@ import IngredientAddPage from './pages/IngredientAddPage';
 import RecipeAddPage from './pages/RecipeAddPage';
 import { colors } from './assets/theme';
 import { IngredientProvider } from './context/IngredientContext';
+import { RecipeProvider } from './context/RecipeContext';
 
 
 const Stack = createStackNavigator();
@@ -51,6 +52,7 @@ const IngredientStack = () => {
 const App = () => {
   return (
     <IngredientProvider>
+      <RecipeProvider>
 <NavigationContainer>
 <Tab.Navigator
         screenOptions={() => ({
@@ -69,6 +71,7 @@ const App = () => {
       <Tab.Screen name="IngredientStack" options={{headerShown: false}} component={IngredientStack} />
   </Tab.Navigator>
 </NavigationContainer>
+</RecipeProvider>
 </IngredientProvider>
   );
 }

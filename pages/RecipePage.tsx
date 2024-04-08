@@ -1,13 +1,10 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { View, StyleSheet, FlatList, Dimensions, Text, ScrollView } from 'react-native';
-import RecipeCardComponent from '../components/RecipeCardComponent';
-import { Recipe } from '../types/Recipe';
-import axios from 'axios';
 import { Button } from '@rneui/base/dist/Button';
-import { Ingredient } from '../types/Ingredient';
 import { colors } from '../assets/theme';
 import { useFocusEffect } from '@react-navigation/native';
 import RecipeCardNew from '../components/RecipeCardNew';
+import { RecipeContext } from '../context/RecipeContext';
 
 const { width } = Dimensions.get('window');
 
@@ -15,26 +12,17 @@ const RecipePage = ({navigation}) => {
 
   const col = 2;
 
+  const {recipes, getRecipes} = useContext(RecipeContext);
+
   useFocusEffect(
     useCallback(() => {
       getRecipes();
     }, [])
   )
 
-  const [recipes, setRecipes] = useState<Recipe[]>([]);
-
-  const getRecipes = async() => {
-    const response = await axios.get("https://recipeapp2.fly.dev/Recipe");
-    setRecipes(response.data)
-  }
-
   useEffect(() => {
     getRecipes();
   }, [])
-
-  const RecipeCard = ({recipe} : {recipe: Recipe}) => {
-    return <View><RecipeCardComponent navigation={navigation} recipe={recipe} /></View>
-  }
 
   return (
     <View style={styles.container}>

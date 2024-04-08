@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { View, Text, Image, ScrollView, StyleSheet } from 'react-native';
 import IngredientItem from '../components/IngredientItemComponent';
 import RecipeIngredientSearchItem from '../components/RecipeIngredientISearchtemComponent';
@@ -8,21 +8,24 @@ import { Recipe } from '../types/Recipe';
 import { Button, Dialog } from '@rneui/base';
 import { colors } from '../assets/theme';
 import axios from 'axios';
+import { RecipeContext } from '../context/RecipeContext';
 
 const RecipeDetailsPage = ({route, navigation}) => {
 
   const recipe : Recipe = route.params;
 
   const [isDeleting, setIsDeleting] = useState(false);
-
-  const deleteRecipe = async (id: string) => {
-    await axios.delete("https://recipeapp2.fly.dev/Recipe?id=" + id)
-    navigation.navigate("Recipes")
-  }
+  const {deleteRecipe} = useContext(RecipeContext);
 
   const handleDelete = () => {
-    setIsDeleting(false);
-    deleteRecipe(recipe.id);
+    try {    
+      setIsDeleting(false);
+      deleteRecipe(recipe.id);
+      navigation.navigate("Recipes")
+    }
+      catch{
+        console.log("error deleting recipe");
+      }
   }
 
   return (

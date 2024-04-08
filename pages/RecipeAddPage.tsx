@@ -1,5 +1,5 @@
 import { Button, Divider, Input, color } from '@rneui/base';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import { View, Text, StyleSheet, FlatList, Image, TextInput, ScrollView, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import axios from "axios";
 import { Ingredient } from '../types/Ingredient';
@@ -11,26 +11,33 @@ import RecipeIngredientItem from '../components/RecipeIngredientItemComponent';
 import RecipeIngredientSearchItem from '../components/RecipeIngredientISearchtemComponent';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import IngredientOnRecipeAdder from '../components/IngredientOnRecipeAdder';
+import { RecipeContext } from '../context/RecipeContext';
+import { IngredientContext } from '../context/IngredientContext';
 
 const RecipeAddPage = ({navigation, route}) => {
 
   const [name, setName] = useState<string>();
   const [description, setDescription] = useState<string>();
   const [activeStep, setActiveStep] = useState<number>(0);
-  const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [matchingIngredients, setMatchingIngredients] = useState([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [finalIngredients, setFinalIngredients] = useState<RecipeIngredient[]>([]);
   const [newFinalIngredients, setNewFinalIngredients] = useState<RecipeIngredient[]>([]);
   const [pictureURL, setPictureURL] = useState<string>();
 
-    const getAllIngredients = () => {
-    axios.get("https://recipeapp2.fly.dev/Ingredient").then(response => setIngredients(response.data)).catch(err => console.log("Error occured when getting all ingredients on add recipe view", err))
-    }
+  const {addRecipe} = useContext(RecipeContext);
+  const {ingredients} = useContext(IngredientContext);
 
-    useEffect(() => {
-      getAllIngredients();
-    }, [])
+  const handleAdd = async() => {
+    try {    
+      const response = await addRecipe(name, description, finalIngredients, newFinalIngredients, pictureURL);
+      console.log(response)
+      navigation.navigate("Recipes")
+    }
+    catch {
+      console.log("ERROR CAUGHT");
+    }
+  }
 
     useEffect(() => {
       if (activeStep == 1)
@@ -51,7 +58,7 @@ const RecipeAddPage = ({navigation, route}) => {
       <View style={styles.buttonContainer}>
         {activeStep > 0 && <Button style={{padding: 6, width: 120}} buttonStyle={{backgroundColor: colors.ELEMENTS_PRIMARY}} titleStyle={{color: colors.ELEMENTS_SECONDARY, fontSize: 16}} onPress={() => {setActiveStep(prev => prev - 1)}}>Previous</Button>}
         {activeStep != 1 && <Button style={{padding: 6, width: 120}} buttonStyle={{backgroundColor: colors.ELEMENTS_PRIMARY}} titleStyle={{color: colors.ELEMENTS_SECONDARY, fontSize: 16}} onPress={() => {setActiveStep(prev => prev + 1)}}>Next</Button>}
-        {activeStep == 1 && <Button style={{padding: 6, width: 120}} buttonStyle={{backgroundColor: colors.ELEMENTS_PRIMARY}} titleStyle={{color: colors.ELEMENTS_SECONDARY, fontSize: 16}} onPress={() => {addRecipeRequest(name, description, finalIngredients, newFinalIngredients)}}>Add Recipe</Button>}
+        {activeStep == 1 && <Button style={{padding: 6, width: 120}} buttonStyle={{backgroundColor: colors.ELEMENTS_PRIMARY}} titleStyle={{color: colors.ELEMENTS_SECONDARY, fontSize: 16}} onPress={handleAdd}>Add Recipe</Button>}
       </View>
     )
   }
@@ -64,25 +71,6 @@ const RecipeAddPage = ({navigation, route}) => {
     else
       setMatchingIngredients(ingredients.filter(i => i.name?.toLowerCase().includes(searchTerm?.toLowerCase())))
   }, [searchTerm])
-
-  const addRecipeRequest = (name, description, ingredients, newIngredients) => {
-    const formattedIngredients = ingredients.map(({ id, amount }) => ({ id, amount }))
-    console.log(name, description, formattedIngredients, newIngredients, pictureURL)
-    axios.post('https://recipeapp2.fly.dev/Recipe/add_recipe_with_new_ingredients',
-    {
-      description: description,
-      ingredients: formattedIngredients,
-      name: name,
-      newIngredients: newIngredients,
-      pictureUrl: pictureURL
-    },)
-    .then(response => {
-      navigation.navigate("Recipes")
-    })
-    .catch(error => {
-      console.error('Error:', error, formattedIngredients);
-    });
-  }
 
 
 
