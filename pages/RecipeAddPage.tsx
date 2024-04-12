@@ -1,6 +1,6 @@
 import { Button, Divider, Input, color } from '@rneui/base';
 import React, {useContext, useEffect, useRef, useState} from 'react';
-import { View, Text, StyleSheet, FlatList, Image, TextInput, ScrollView, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Image, TextInput, ScrollView, TouchableWithoutFeedback, Keyboard, Modal, ActivityIndicator } from 'react-native';
 import axios from "axios";
 import { Ingredient } from '../types/Ingredient';
 import Stepper from 'react-native-stepper-view';
@@ -13,6 +13,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import IngredientOnRecipeAdder from '../components/IngredientOnRecipeAdder';
 import { RecipeContext } from '../context/RecipeContext';
 import { IngredientContext } from '../context/IngredientContext';
+import Spinner from '../components/Spinner';
 
 const RecipeAddPage = ({navigation, route}) => {
 
@@ -24,18 +25,22 @@ const RecipeAddPage = ({navigation, route}) => {
   const [finalIngredients, setFinalIngredients] = useState<RecipeIngredient[]>([]);
   const [newFinalIngredients, setNewFinalIngredients] = useState<RecipeIngredient[]>([]);
   const [pictureURL, setPictureURL] = useState<string>();
+  const [isRequestingAdd, setIsRequestingAdd] = useState(false);
 
   const {addRecipe} = useContext(RecipeContext);
   const {ingredients} = useContext(IngredientContext);
 
   const handleAdd = async() => {
+    setIsRequestingAdd(true);
     try {    
       const response = await addRecipe(name, description, finalIngredients, newFinalIngredients, pictureURL);
       console.log(response)
+      setIsRequestingAdd(false);
       navigation.navigate("Recipes")
     }
     catch {
       console.log("ERROR CAUGHT");
+      setIsRequestingAdd(false);
     }
   }
 
@@ -123,6 +128,11 @@ const RecipeAddPage = ({navigation, route}) => {
           </SafeAreaView>
       </Stepper.Step>
     </Stepper>
+    <Modal animationType='fade' transparent={true} visible={isRequestingAdd} onRequestClose={() => {}}>
+      <View style={{flex: 1, backgroundColor: "rgba(195,216,236,0.5)", justifyContent: "center", alignItems: "center"}}>
+        <Spinner />
+      </View>
+    </Modal>
     </View>
   );
 };
