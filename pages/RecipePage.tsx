@@ -5,6 +5,7 @@ import { colors } from '../assets/theme';
 import { useFocusEffect } from '@react-navigation/native';
 import RecipeCardNew from '../components/RecipeCardNew';
 import { RecipeContext } from '../context/RecipeContext';
+import { IngredientContext } from '../context/IngredientContext';
 
 const { width } = Dimensions.get('window');
 
@@ -13,6 +14,7 @@ const RecipePage = ({navigation}) => {
   const col = 2;
 
   const {recipes, getRecipes} = useContext(RecipeContext);
+  const {getIngredients} =  useContext(IngredientContext);
 
   useFocusEffect(
     useCallback(() => {
@@ -22,9 +24,11 @@ const RecipePage = ({navigation}) => {
 
   useEffect(() => {
     getRecipes();
+    getIngredients();
   }, [])
 
   return (
+    <View style={styles.globalAppContainer}>
     <View style={styles.container}>
           <View style={styles.app}>
             <Button style={styles.button} buttonStyle={{borderRadius: 8, backgroundColor: colors.ELEMENTS_PRIMARY}} titleStyle={{color: colors.ELEMENTS_SECONDARY}} title="Add new Recipe" onPress={() => {navigation.navigate('AddRecipe')}}/> 
@@ -36,6 +40,7 @@ const RecipePage = ({navigation}) => {
             })}
             </ScrollView>
         </View>
+    </View>
     </View>
   );
 };
@@ -66,6 +71,10 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     justifyContent: "space-between",
     width: width
+  },
+  globalAppContainer: {
+    flex: 1,
+    backgroundColor: colors.BACKGROUND_PRIMARY
   }
 });
 

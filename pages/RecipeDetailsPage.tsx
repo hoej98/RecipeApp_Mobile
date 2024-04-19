@@ -41,7 +41,9 @@ const RecipeDetailsPage = ({route, navigation}) => {
       <ScrollView style={styles.ingredientsContainer}>
         {recipe.recipeIngredients.map((ingredient) => {
           return (
-            <RecipeDetailsIngredientItem recipeIngredient={ingredient} key={ingredient.id} />
+            <View key={ingredient.id}>
+            <RecipeDetailsIngredientItem recipeIngredient={ingredient} />
+            </View>
           )
         })}
         

@@ -33,7 +33,9 @@ const RecipeAddPage = ({navigation, route}) => {
   const handleAdd = async() => {
     setIsRequestingAdd(true);
     try {    
-      const response = await addRecipe(name, description, finalIngredients, newFinalIngredients, pictureURL);
+      const trimmedName = name.trim();
+      const trimmedDescription = description.trim();
+      const response = await addRecipe(trimmedName, trimmedDescription, finalIngredients, newFinalIngredients, pictureURL);
       console.log(response)
       setIsRequestingAdd(false);
       navigation.navigate("Recipes")
@@ -48,7 +50,7 @@ const RecipeAddPage = ({navigation, route}) => {
       if (activeStep == 1)
       {
         axios.post("https://recipeapp2.fly.dev/Recipe/generate_image", null, {
-          params: {description: description}
+          params: {description: description.trim()}
         })
         .then(
           //response => setDescription(response.data)
@@ -105,7 +107,7 @@ const RecipeAddPage = ({navigation, route}) => {
           <View style={{marginBottom: 10, zIndex: 1, position: 'absolute',top: 50,bottom: 0,left: 0,right: 0, minHeight: 200}}>
             {matchingIngredients.length > 0 &&           
             <FlatList
-            keyboardShouldPersistTaps
+            keyboardShouldPersistTaps="always"
             data={matchingIngredients}
             numColumns={1}
             renderItem={({item}) => <RecipeIngredientSearchItem ingredient={item} setSearchTerm={setSearchTerm} setFinalIngredients={setFinalIngredients} /> }
