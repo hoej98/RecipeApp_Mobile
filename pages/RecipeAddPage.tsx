@@ -131,6 +131,8 @@ const RecipeAddPage = ({navigation, route}) => {
     <Modal animationType='fade' transparent={true} visible={isRequestingAdd} onRequestClose={() => {}}>
       <View style={{flex: 1, backgroundColor: "rgba(195,216,236,0.5)", justifyContent: "center", alignItems: "center"}}>
         <Spinner />
+      <Text style={{fontSize: 18, padding: 5, marginTop: 20}}>Dall-E is generating images for you...</Text>
+      <Text style={{fontSize: 18, padding: 5}}>In the meanime, enjoy Mille chasing her ball</Text>
       </View>
     </Modal>
     </View>

@@ -41,7 +41,7 @@ const RecipeDetailsPage = ({route, navigation}) => {
       <ScrollView style={styles.ingredientsContainer}>
         {recipe.recipeIngredients.map((ingredient) => {
           return (
-            <RecipeDetailsIngredientItem recipeIngredient={ingredient} />
+            <RecipeDetailsIngredientItem recipeIngredient={ingredient} key={ingredient.id} />
           )
         })}
         
@@ -90,9 +90,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   ingredientsContainer: {
+    flex: 1,
     width: '80%',
   },
   buttonContainer: {
+    flex: 1,
     flexDirection: "row",
     alignItems: "center",
     position: "absolute",

@@ -30,7 +30,7 @@ const RecipePage = ({navigation}) => {
             <Button style={styles.button} buttonStyle={{borderRadius: 8, backgroundColor: colors.ELEMENTS_PRIMARY}} titleStyle={{color: colors.ELEMENTS_SECONDARY}} title="Add new Recipe" onPress={() => {navigation.navigate('AddRecipe')}}/> 
             <ScrollView contentContainerStyle={styles.listContainer}>
             {recipes.map((recipe) => {
-              return <View style={{width: "50%", padding: 20}}>
+              return <View style={{width: "50%", padding: 20}} key={recipe.id}>
                 <RecipeCardNew recipe={recipe} navigation={navigation} />
               </View>
             })}
