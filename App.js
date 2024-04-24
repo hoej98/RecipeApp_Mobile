@@ -11,6 +11,7 @@ import RecipeAddPage from './pages/RecipeAddPage';
 import { colors } from './assets/theme';
 import { IngredientProvider } from './context/IngredientContext';
 import { RecipeProvider } from './context/RecipeContext';
+import ShoppingListPage from './pages/ShoppingListPage';
 
 
 const Stack = createStackNavigator();
@@ -49,6 +50,19 @@ const IngredientStack = () => {
   )
 }
 
+const ShoppingListStack = () => {
+  return (
+    <Stack.Navigator  screenOptions={{
+      headerStyle: {
+        backgroundColor: colors.BACKGROUND_PRIMARY
+      },
+      headerTintColor: colors.ELEMENTS_SECONDARY
+     }}>
+      <Stack.Screen name="ShoppingList" component={ShoppingListPage} />
+     </Stack.Navigator>
+  )
+}
+
 const App = () => {
   return (
     <IngredientProvider>
@@ -69,6 +83,7 @@ const App = () => {
       >
       <Tab.Screen name="RecipesStack" options={{headerShown: false}} component={RecipeStack}  />
       <Tab.Screen name="IngredientStack" options={{headerShown: false}} component={IngredientStack} />
+      <Tab.Screen name="ShoppingListStack" options={{headerShown: false}} component={ShoppingListStack} />
   </Tab.Navigator>
 </NavigationContainer>
 </RecipeProvider>
