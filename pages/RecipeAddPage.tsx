@@ -20,7 +20,7 @@ const RecipeAddPage = ({navigation, route}) => {
   const [name, setName] = useState<string>();
   const [description, setDescription] = useState<string>();
   const [activeStep, setActiveStep] = useState<number>(0);
-  const [matchingIngredients, setMatchingIngredients] = useState([]);
+  const [matchingIngredients, setMatchingIngredients] = useState<Ingredient[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [finalIngredients, setFinalIngredients] = useState<RecipeIngredient[]>([]);
   const [newFinalIngredients, setNewFinalIngredients] = useState<RecipeIngredient[]>([]);
@@ -36,7 +36,7 @@ const RecipeAddPage = ({navigation, route}) => {
       const trimmedName = name.trim();
       const trimmedDescription = description.trim();
       const response = await addRecipe(trimmedName, trimmedDescription, finalIngredients, newFinalIngredients, pictureURL);
-      console.log(response)
+      console.log(pictureURL)
       setIsRequestingAdd(false);
       navigation.navigate("Recipes")
     }
@@ -111,7 +111,7 @@ const RecipeAddPage = ({navigation, route}) => {
             data={matchingIngredients}
             numColumns={1}
             renderItem={({item}) => <RecipeIngredientSearchItem ingredient={item} setSearchTerm={setSearchTerm} setFinalIngredients={setFinalIngredients} /> }
-            key={1}
+            keyExtractor={(item) => item.id}
           />}
             {matchingIngredients.length == 0 && searchTerm.length != 0 && 
             <IngredientOnRecipeAdder setSearchTerm={setSearchTerm} setNewFinalIngredients={setNewFinalIngredients} initialName={searchTerm}/>
@@ -122,7 +122,7 @@ const RecipeAddPage = ({navigation, route}) => {
             numColumns={1}
             renderItem={({item}) => <RecipeIngredientItem recipeIngredient={item} setFinalIngredients={setFinalIngredients} /> }
             style={{zIndex: searchTerm == "" && 1}}
-            key={2}
+            keyExtractor={(item) => item.id}
           />
           </View>
           <SafeAreaView style={{alignItems: 'center', justifyContent: 'center', width: 340 }}>

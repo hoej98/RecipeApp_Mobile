@@ -3,6 +3,10 @@
     "name": "recipeApp_lsh_mhh",
     "slug": "recipeApp_lsh_mhh",
     "version": "1.0.2",
+    "platforms": ["ios", "android", "web"],
+    "extra": {
+      "googleClientId": "1049251486525-n8hsqf2sll4j24f2o3pnmsolf8q2eta8.apps.googleusercontent.com"
+    },
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -16,12 +20,22 @@
     ],
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "com.hoej98.recipeApp"
+      "bundleIdentifier": "com.hoej98.recipeApp",
+      "config": {
+        "googleSignIn": {
+          "reservedClientId": "1049251486525-5nbueurfenans14bdmbl5sikronflq9s.apps.googleusercontent.com"
+        }
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
+      },
+      "config": {
+        "googleSignIn": {
+          "apiKey": "YOUR_ANDROID_API_KEY"
+        }
       }
     },
     "web": {
@@ -31,6 +45,7 @@
       "eas": {
         "projectId": "4723a6b0-4866-47b1-b870-c7dc213419e1"
       }
-    }
+    },
+    "scheme": "RecipeApp"
   }
 }

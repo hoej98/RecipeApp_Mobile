@@ -38,7 +38,7 @@ export const RecipeContext = createContext<RecipeContextType>({
 
       const addRecipe = async (name: string, description: string, ingredients: RecipeIngredient[], newIngredients: RecipeIngredient[], pictureURL: string) => {
             const formattedIngredients = ingredients.map(({ id, amount }) => ({ id, amount }))
-            console.log(name, description, formattedIngredients, newIngredients, pictureURL)
+            console.log(pictureURL)
             try {
                 const response : AxiosResponse = await axios.post('https://recipeapp2.fly.dev/Recipe/add_recipe_with_new_ingredients',
                 {
@@ -46,7 +46,7 @@ export const RecipeContext = createContext<RecipeContextType>({
                   ingredients: formattedIngredients,
                   name: name,
                   newIngredients: newIngredients,
-                  pictureUrl: pictureURL
+                  pictureUrl: "this should be removed"
                 },)
                 showToast("succesfully added recipe with name: " + name, "success")
                 getRecipes();

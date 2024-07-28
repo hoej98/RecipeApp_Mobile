@@ -52,7 +52,7 @@ const IngredientStack = () => {
 
 const ShoppingListStack = () => {
   return (
-    <Stack.Navigator  screenOptions={{
+    <Stack.Navigator screenOptions={{
       headerStyle: {
         backgroundColor: colors.BACKGROUND_PRIMARY
       },

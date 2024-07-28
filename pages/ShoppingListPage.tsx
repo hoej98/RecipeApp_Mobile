@@ -1,6 +1,7 @@
 import React from 'react';
 import ShoppingListItem from "../components/ShoppingListItemComponent";
 import { View } from 'react-native';
+import GoogleLoginButton from '../components/LoginWithGoogleButtonComponent';
 
 const ShoppingListPage = ({navigation}) => {
     return(
@@ -13,6 +14,7 @@ const ShoppingListPage = ({navigation}) => {
     </View>
     <View style={{flex: 1, backgroundColor: "yellow"}}>
     <ShoppingListItem />
+    <GoogleLoginButton/>
     </View>
     </View>
     )

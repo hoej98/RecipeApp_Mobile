@@ -20,7 +20,7 @@ const IngredientOnRecipeAdder = ({ setSearchTerm, setNewFinalIngredients, initia
     const [amount, setAmount] = useState("");
 
     const handleAdd = () => {
-        setNewFinalIngredients(prev => [...prev, {id: "-123", amount: amount, ingredientName: name, ingredientPrice: price, ingredientPictureUrl: "no image"}])
+        setNewFinalIngredients(prev => [...prev, {id: Math.random().toString(36), amount: amount, ingredientName: name, ingredientPrice: price, ingredientPictureUrl: "no image"}])
         setSearchTerm("");
         setIsDialogOpen(false);
     }
